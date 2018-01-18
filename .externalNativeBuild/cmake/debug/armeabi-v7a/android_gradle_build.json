@@ -1,0 +1,27 @@
+
+{
+	"buildFiles" : [ "E:/AndriodProject/LPR_OpenCV/app/CMakeLists.txt" ],
+	"cleanCommands" : 
+	[
+		"D:\\AndroidSDK\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndriodProject\\LPR_OpenCV\\app\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target clean"
+	],
+	"libraries" : 
+	{
+		"lib_opencv-Debug-armeabi-v7a" : 
+		{
+			"abi" : "armeabi-v7a",
+			"artifactName" : "lib_opencv",
+			"buildType" : "debug",
+			"output" : "E:/AndriodProject/LPR_OpenCV/app/src/main/OpenCVLib/armeabi-v7a/libopencv_java.so",
+			"toolchain" : "3745389449"
+		}
+	},
+	"toolchains" : 
+	{
+		"3745389449" : 
+		{
+			"cCompilerExecutable" : "D:/AndroidSDK/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+			"cppCompilerExecutable" : "D:/AndroidSDK/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
+		}
+	}
+}

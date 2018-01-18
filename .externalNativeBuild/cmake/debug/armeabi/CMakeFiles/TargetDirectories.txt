@@ -1,0 +1,2 @@
+E:/AndriodProject/LPR_OpenCV/app/.externalNativeBuild/cmake/debug/armeabi/CMakeFiles/edit_cache.dir
+E:/AndriodProject/LPR_OpenCV/app/.externalNativeBuild/cmake/debug/armeabi/CMakeFiles/rebuild_cache.dir
