@@ -1,6 +1,6 @@
-#introduce  
+# introduce  
 this project is using opencv on android
 
-#requirements  
+# requirements  
 -Java 1.8 or later
 -opencv4android_2411
