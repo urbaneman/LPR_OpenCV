@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
     }
 
-
+    //按键监听
     @Override
     public void onClick(View view) {
         switch (view.getId())
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //接收图片管理器返回的信息
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return null;
         }
     }
-
+    //获取文件真实的绝对路径
     public static String getRealFilePath(final Context context, final Uri uri ) {
         if ( null == uri ) return null;
         final String scheme = uri.getScheme();
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return data;
     }
 
+    //OpenCV 动态加载
     @Override
     protected void onResume() {
         super.onResume();
