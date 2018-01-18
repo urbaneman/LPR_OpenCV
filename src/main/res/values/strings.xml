@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">车牌识别系统</string>
+    <string name="button_t_recognition">识别车牌信息</string>
+    <string name="button_t_history">识别历史</string>
+    <string name="button_t_localfiles">本地图片</string>
+    <string name="button_t_takephoto">手机拍照</string>
+</resources>

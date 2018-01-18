@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+
+    tools:context="com.wangbin.lpr_opencv.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/MintCream">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/app_name"
+            android:textSize="@dimen/activity_app_name"/>
+
+        <ImageButton
+            android:id="@+id/button_history"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/history2"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:background="@color/colorNone"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textview"
+        android:layout_above="@+id/button_ll"
+        android:scaleType="centerInside"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/deepblack"
+        android:padding="2dp"/>
+
+    <LinearLayout
+        android:id="@+id/button_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/button_takephoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/camera1"
+            android:background="@color/colorNone"/>
+
+        <ImageButton
+            android:id="@+id/button_recog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/scanning1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorNone"/>
+
+        <ImageButton
+            android:id="@+id/button_localfiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/icon1"
+            android:background="@color/colorNone"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
