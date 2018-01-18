@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onManagerConnected(int status) {
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS: {
-                    ///Log.i(TAG, "OpenCV loaded successfully");
+                    //Log.i(TAG, "OpenCV loaded successfully");
                     //mOpenCvCameraView.enableView();
                     //mOpenCvCameraView.setOnTouchListener(ColorBlobDetectionActivity.this);
                 }
