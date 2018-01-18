@@ -204,9 +204,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
-    public void SJJ() {
-
-    }
-
 }
