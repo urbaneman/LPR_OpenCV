@@ -93,15 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this,"请打开一张图片!",Toast.LENGTH_LONG).show();
                     break;
                 }*/
-                inputImage_Mat =  new Mat();
-                inputImage_Gray = new Mat();
-                imageshow = Bitmap.createBitmap(inputImage.getWidth(),inputImage.getHeight(), Bitmap.Config.ARGB_8888);
-                Utils.bitmapToMat(inputImage, inputImage_Mat);
-                Imgproc.cvtColor(inputImage_Mat, inputImage_Gray, Imgproc.COLOR_RGB2GRAY);
-                Utils.matToBitmap(inputImage_Gray, imageshow);
-                imageView.setDrawingCacheEnabled(true);
-                imageView.setImageBitmap(imageshow);
-                imageView.setDrawingCacheEnabled(false);
+                scanning(inputImage);
                 break;
             case R.id.button_takephoto:
                 //startActivity(new Intent(MainActivity.this, CameraActivity.class));
@@ -166,6 +158,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         return data;
+    }
+
+
+    private void scanning(Bitmap inputImage){
+        inputImage_Mat =  new Mat();
+        inputImage_Gray = new Mat();
+        imageshow = Bitmap.createBitmap(inputImage.getWidth(),inputImage.getHeight(), Bitmap.Config.ARGB_8888);
+        Utils.bitmapToMat(inputImage, inputImage_Mat);
+        ImageProcess scanning = new ImageProcess(inputImage_Mat);
+        scanning.Pre_treatment(scanning.getSrc());
+        inputImage_Gray = scanning.getDst();
+        Utils.matToBitmap(inputImage_Gray, imageshow);
+        imageView.setDrawingCacheEnabled(true);
+        imageView.setImageBitmap(imageshow);
+        imageView.setDrawingCacheEnabled(false);
     }
 
     //OpenCV 动态加载
