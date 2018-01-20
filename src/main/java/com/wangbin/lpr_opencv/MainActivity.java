@@ -93,7 +93,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this,"请打开一张图片!",Toast.LENGTH_LONG).show();
                     break;
                 }*/
-                scanning(inputImage);
+                if(inputImage == null)
+                    Toast.makeText(this, "请指定所要识别的图像！", Toast.LENGTH_LONG).show();
+                else
+                    scanning(inputImage);
                 break;
             case R.id.button_takephoto:
                 //startActivity(new Intent(MainActivity.this, CameraActivity.class));
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Uri uri = data.getData();
                 image_path = getRealFilePath(this,uri);
 
-                Toast.makeText(this, "path："+image_path, Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "path："+image_path, Toast.LENGTH_LONG).show();
 
                 inputImage = BitmapFactory.decodeFile(image_path);
                 //Utils.matToBitmap(inputImage_Mat, inputImage);
@@ -164,11 +167,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void scanning(Bitmap inputImage){
         inputImage_Mat =  new Mat();
         inputImage_Gray = new Mat();
-        imageshow = Bitmap.createBitmap(inputImage.getWidth(),inputImage.getHeight(), Bitmap.Config.ARGB_8888);
         Utils.bitmapToMat(inputImage, inputImage_Mat);
         ImageProcess scanning = new ImageProcess(inputImage_Mat);
         scanning.Pre_treatment(scanning.getSrc());
         inputImage_Gray = scanning.getDst();
+        imageshow = Bitmap.createBitmap(inputImage_Gray.cols(),inputImage_Gray.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(inputImage_Gray, imageshow);
         imageView.setDrawingCacheEnabled(true);
         imageView.setImageBitmap(imageshow);
