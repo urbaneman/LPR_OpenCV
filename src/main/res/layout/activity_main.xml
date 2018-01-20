@@ -46,7 +46,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/textview"
         android:layout_above="@+id/button_ll"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/deepblack"
