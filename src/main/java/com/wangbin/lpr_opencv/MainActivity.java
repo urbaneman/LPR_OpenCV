@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Bitmap inputImage = null;
     private Bitmap background = null;
     private Mat inputImage_Mat = null;
-    private Mat inputImage_Gray = null;
+    private Mat outputImage = null;
     private ImageView imageView = null;
     private String image_path = null;
     private Bitmap imageshow = null;
@@ -166,13 +166,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void scanning(Bitmap inputImage){
         inputImage_Mat =  new Mat();
-        inputImage_Gray = new Mat();
+        outputImage = new Mat();
         Utils.bitmapToMat(inputImage, inputImage_Mat);
         ImageProcess scanning = new ImageProcess(inputImage_Mat);
         scanning.Pre_treatment();
-        inputImage_Gray = scanning.getDst();
-        imageshow = Bitmap.createBitmap(inputImage_Gray.cols(),inputImage_Gray.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(inputImage_Gray, imageshow);
+        scanning.findAreaofLP();
+
+        //outputImage = scanning.getDst();
+
+        //显示轮廓图
+        outputImage = scanning.getSrc();
+        imageshow = Bitmap.createBitmap(outputImage.cols(),outputImage.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(outputImage, imageshow);
+
         imageView.setDrawingCacheEnabled(true);
         imageView.setImageBitmap(imageshow);
         imageView.setDrawingCacheEnabled(false);
