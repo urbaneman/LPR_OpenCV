@@ -2,9 +2,15 @@ package com.wangbin.lpr_opencv;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by dell-pc on 2018/1/19.
@@ -44,6 +50,7 @@ public class ImageProcess {
         return licenseplate;
     }
 
+    //输入图像的预处理过程
     public void Pre_treatment(){
         //调整图像大小
         resize(src);
@@ -95,4 +102,21 @@ public class ImageProcess {
         }
     }
 
+    //车牌区域检索
+    public void findAreaofLP(){
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(dst, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
+        double minArea = 1000;
+
+        //TODO: 进一步进行轮廓剔除
+        for(int idx = 0;idx < contours.size(); ++idx){
+            Mat contour = contours.get(idx);
+            double contoursArea = Imgproc.contourArea(contour);
+            if(contoursArea < minArea){
+                contours.remove(idx);
+            }
+        }
+        Scalar green = new Scalar(0,255,0);
+        Imgproc.drawContours(src,contours,-1,green);
+    }
 }
