@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         inputImage_Gray = new Mat();
         Utils.bitmapToMat(inputImage, inputImage_Mat);
         ImageProcess scanning = new ImageProcess(inputImage_Mat);
-        scanning.Pre_treatment(scanning.getSrc());
+        scanning.Pre_treatment();
         inputImage_Gray = scanning.getDst();
         imageshow = Bitmap.createBitmap(inputImage_Gray.cols(),inputImage_Gray.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(inputImage_Gray, imageshow);
