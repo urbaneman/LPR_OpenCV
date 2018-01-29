@@ -172,10 +172,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scanning.Pre_treatment();
         scanning.findAreaofLP();
 
-        //outputImage = scanning.getDst();
+        outputImage = scanning.getDst();
 
         //显示轮廓图
-        outputImage = scanning.getSrc();
+        //outputImage = scanning.getSrc();
         imageshow = Bitmap.createBitmap(outputImage.cols(),outputImage.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(outputImage, imageshow);
 
