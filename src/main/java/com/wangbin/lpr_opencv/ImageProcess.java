@@ -3,9 +3,13 @@ package com.wangbin.lpr_opencv;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -56,7 +60,7 @@ public class ImageProcess {
         resize(src);
         Mat img_pro = new Mat();
         //高斯模糊
-        Size gaussiansize = new Size(3, 3);
+        Size gaussiansize = new Size(ValueOfImgproc.gaussiansize_width, ValueOfImgproc.gaussiansize_height);
         Imgproc.GaussianBlur(src,img_pro, gaussiansize,0);
 
         //灰度化
@@ -72,13 +76,13 @@ public class ImageProcess {
         Imgproc.threshold(img_pro, img_pro, 0, 255, Imgproc.THRESH_OTSU);
 
         //TODO：寻找开闭运算的最佳内核以及最佳处理顺序
-        Size ksize_open = new Size(9, 9);
-        Size ksize_close = new Size(19, 7);
+        Size ksize_open = new Size(ValueOfImgproc.element_open_width, ValueOfImgproc.element_open_height);
+        Size ksize_close = new Size(ValueOfImgproc.element_close_width, ValueOfImgproc.element_close_height);
         Point anchor = new Point(-1,-1);
         Mat element_open = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,ksize_open);
         Mat element_close = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,ksize_close);
-        Imgproc.morphologyEx(img_pro,img_pro,Imgproc.MORPH_CLOSE,element_close,anchor,1);
-        Imgproc.morphologyEx(img_pro,img_pro,Imgproc.MORPH_OPEN,element_open,anchor,1);
+        Imgproc.morphologyEx(img_pro,img_pro,Imgproc.MORPH_CLOSE,element_close,anchor,ValueOfImgproc.morphologyEx_close_iterations);
+        Imgproc.morphologyEx(img_pro,img_pro,Imgproc.MORPH_OPEN,element_open,anchor,ValueOfImgproc.morphologyEx_open_iterations);
         this.dst = img_pro;
     }
 
@@ -88,14 +92,16 @@ public class ImageProcess {
     //所以根据这三种尺寸的图像进行缩放至宽度为1080
     public void resize(Mat input){
         //如果宽度大于1080
-        if(input.cols()>1080){
-            Mat dst = new Mat();
+        if(input.cols()>ValueOfImgproc.inputImg_maxWidth){
+            Mat img_resize = new Mat();
             double rows = input.rows();
             double ratio = rows / input.cols();
-            if(ratio>=1.77 && ratio<=1.78 || ratio == 1.0 || ratio>= 1.33 && ratio <= 1.34){
-                Size smallsize = new Size(1080, 1080 * dst.rows() / dst.cols());
-                Imgproc.resize(input, dst, smallsize, 0, 0, Imgproc.INTER_LINEAR);
-                this.setSrc(dst);
+            if(ratio>=ValueOfImgproc.ratio_img_4_3_min && ratio<=ValueOfImgproc.ratio_img_4_3_max
+                    || ratio == 1.0
+                    || ratio>= ValueOfImgproc.ratio_img_16_9_min && ratio <= ValueOfImgproc.ratio_img_16_9_max){
+                Size smallsize = new Size(540, 540 * input.rows() / input.cols());
+                Imgproc.resize(input, img_resize, smallsize, 0, 0, Imgproc.INTER_LINEAR);
+                this.setSrc(img_resize);
             }
         }else {
             return;
@@ -105,18 +111,34 @@ public class ImageProcess {
     //车牌区域检索
     public void findAreaofLP(){
         List<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(dst, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
-        double minArea = 1000;
-
+        List<MatOfPoint> contours_like = new ArrayList<>();
+        Mat dst_copy = new Mat();
+        dst_copy = dst.clone();
+        Imgproc.findContours(dst_copy, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
+        Vector<RotatedRect> rects = new Vector<RotatedRect>();
         //TODO: 进一步进行轮廓剔除
-        for(int idx = 0;idx < contours.size(); ++idx){
+        for(int idx = 0;idx < contours.size(); ++idx) {
             Mat contour = contours.get(idx);
+            MatOfPoint2f contour2f = new MatOfPoint2f();
+            contour.convertTo(contour2f, CvType.CV_32F);
             double contoursArea = Imgproc.contourArea(contour);
-            if(contoursArea < minArea){
-                contours.remove(idx);
+            RotatedRect rotatedRect = Imgproc.minAreaRect(contour2f);
+            double ratio_size = rotatedRect.size.width / rotatedRect.size.height;
+            if (contoursArea > ValueOfImgproc.contour_minArea) {
+                System.out.print(rotatedRect.angle);
+                if (ratio_size > ValueOfImgproc.contour_minSizeRatio_small &&
+                        ratio_size < ValueOfImgproc.contour_maxSizeRatio_samll &&
+                        rotatedRect.angle > ValueOfImgproc.contour_minAngle &&
+                        rotatedRect.angle < ValueOfImgproc.contour_maxAngle) {
+                    rects.add(rotatedRect);
+                    contours_like.add(contours.get(idx));
+                }
             }
         }
+        contours.clear();
+        Imgproc.cvtColor(dst,dst,Imgproc.COLOR_GRAY2RGB);
         Scalar green = new Scalar(0,255,0);
-        Imgproc.drawContours(src,contours,-1,green);
+        //Imgproc.drawContours(src, contours_like, -1, green, 2);
+        Imgproc.drawContours(dst, contours_like, -1, green, 2);
     }
 }
