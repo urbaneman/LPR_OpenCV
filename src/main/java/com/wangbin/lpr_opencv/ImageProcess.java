@@ -14,6 +14,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 /**
@@ -99,7 +100,8 @@ public class ImageProcess {
             if(ratio>=ValueOfImgproc.ratio_img_4_3_min && ratio<=ValueOfImgproc.ratio_img_4_3_max
                     || ratio == 1.0
                     || ratio>= ValueOfImgproc.ratio_img_16_9_min && ratio <= ValueOfImgproc.ratio_img_16_9_max){
-                Size smallsize = new Size(540, 540 * input.rows() / input.cols());
+                Size smallsize = new Size(ValueOfImgproc.resizeImg_width,
+                        ValueOfImgproc.resizeImg_width * input.rows() / input.cols());
                 Imgproc.resize(input, img_resize, smallsize, 0, 0, Imgproc.INTER_LINEAR);
                 this.setSrc(img_resize);
             }
@@ -126,19 +128,50 @@ public class ImageProcess {
             double ratio_size = rotatedRect.size.width / rotatedRect.size.height;
             if (contoursArea > ValueOfImgproc.contour_minArea) {
                 System.out.print(rotatedRect.angle);
-                if (ratio_size > ValueOfImgproc.contour_minSizeRatio_small &&
-                        ratio_size < ValueOfImgproc.contour_maxSizeRatio_samll &&
-                        rotatedRect.angle > ValueOfImgproc.contour_minAngle &&
-                        rotatedRect.angle < ValueOfImgproc.contour_maxAngle) {
-                    rects.add(rotatedRect);
-                    contours_like.add(contours.get(idx));
+                if(rotatedRect.size.width > rotatedRect.size.height){
+                    if(ratio_size > ValueOfImgproc.contour_minSizeRatio_small &&
+                            ratio_size < ValueOfImgproc.contour_maxSizeRatio_samll &&
+                            rotatedRect.angle > ValueOfImgproc.contour_LayDown_minAngle &&
+                            rotatedRect.angle < ValueOfImgproc.contour_LayDown_maxAngle) {
+                        rects.add(rotatedRect);
+                        contours_like.add(contours.get(idx));
+                    }
+                }else {
+                    ratio_size = rotatedRect.size.height / rotatedRect.size.width;
+                    if(ratio_size > ValueOfImgproc.contour_minSizeRatio_small &&
+                            ratio_size < ValueOfImgproc.contour_maxSizeRatio_samll &&
+                            rotatedRect.angle > ValueOfImgproc.contour_LayUp_minAngle &&
+                            rotatedRect.angle < ValueOfImgproc.contour_LayUp_maxAngle) {
+                        rects.add(rotatedRect);
+                        contours_like.add(contours.get(idx));
+                    }
                 }
             }
         }
         contours.clear();
         Imgproc.cvtColor(dst,dst,Imgproc.COLOR_GRAY2RGB);
-        Scalar green = new Scalar(0,255,0);
+        /*for(int i = 0; i < rects.size(); ++i){
+            Point []points = new Point[4];
+            rects.get(i).points(points);
+            int []color = new int[dst.channels()];
+            for(int c = 0; c < dst.channels(); ++c)
+                color[c] = (int) (Math.random() * 255);
+            drawPoints(dst, points, color, 3);
+        }*/
+        Scalar green = new Scalar(0, 255, 0);
         //Imgproc.drawContours(src, contours_like, -1, green, 2);
         Imgproc.drawContours(dst, contours_like, -1, green, 2);
+
+    }
+
+    public void drawPoints(Mat input, Point[] points, int color[], int thickness) {
+        for(int i = 0;i < points.length; ++i){
+            for(int j = 0; j < (thickness+1)/2; ++j) {
+                input.put((int) points[i + j].y, (int) points[i + j].x, color);
+                if(j == 0)
+                    continue;
+                input.put((int) points[i - j].y, (int) points[i - j].x, color);
+            }
+        }
     }
 }
